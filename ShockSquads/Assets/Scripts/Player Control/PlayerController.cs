@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : ControllerMechanics {
+    
 
     private NavMeshAgent agent;
     private GameObject movementEmpty;
@@ -145,11 +147,11 @@ public class PlayerController : ControllerMechanics {
     void FixedUpdate ()
     {
         //Rotate to face with camera
-        transform.rotation = Quaternion.Euler(0f, cameraEmpty.transform.localRotation.eulerAngles.y, 0f);
+        //transform.rotation = Quaternion.Euler(0f, cameraEmpty.transform.localRotation.eulerAngles.y, 0f);
 
 
         //Define movement vectors
-        Vector3 wantedPosition = Quaternion.Euler(0f, cameraEmpty.transform.localRotation.eulerAngles.y, 0f)
+        Vector3 wantedPosition = Quaternion.Euler(0f, transform.localRotation.eulerAngles.y, 0f)
             * new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         wantedPosition.x = wantedPosition.x * movespeed;
         wantedPosition.z = wantedPosition.z * movespeed;
