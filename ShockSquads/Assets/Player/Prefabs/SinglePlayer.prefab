@@ -21,6 +21,9 @@ GameObject:
   - component: {fileID: 4615905040731766}
   - component: {fileID: 54021281392008214}
   - component: {fileID: 114370404855036860}
+  - component: {fileID: 114893898254463694}
+  - component: {fileID: 114604767413815962}
+  - component: {fileID: 136990414916044184}
   m_Layer: 0
   m_Name: SinglePlayer
   m_TagString: MainCamera
@@ -53,7 +56,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1979173197942844}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: -2.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4615905040731766}
@@ -98,7 +101,7 @@ Camera:
   field of view: 70
   orthographic: 0
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 100
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -146,6 +149,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c2c3e69b0ec9144ad10c01120199e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114604767413815962
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386140765013208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114893898254463694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386140765013208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 247
+    i1: 161
+    i2: 215
+    i3: 90
+    i4: 102
+    i5: 207
+    i6: 203
+    i7: 116
+    i8: 75
+    i9: 216
+    i10: 84
+    i11: 111
+    i12: 65
+    i13: 12
+    i14: 166
+    i15: 231
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!124 &124268669840892248
 Behaviour:
   m_ObjectHideFlags: 1
@@ -153,3 +209,16 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1979173197942844}
   m_Enabled: 1
+--- !u!136 &136990414916044184
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386140765013208}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
