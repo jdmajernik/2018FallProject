@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 13f1550e0237f6346b8201df465fb17f
+timeCreated: 1523735662
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - creator: {instanceID: 0}
+  - weapon_type: {instanceID: 0}
+  - mat_bullet: {fileID: 2100000, guid: 0c877f37ddacd2e40914d6ca2567926e, type: 2}
+  - prefab: {fileID: 1174614118102252, guid: db9ce9bc7c87cdf448d7cb6e5b166482, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

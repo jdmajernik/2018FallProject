@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "com.unity.purchasing": "exclude",
+    "com.unity.textmeshpro": "1.2.4"
+  }
+}

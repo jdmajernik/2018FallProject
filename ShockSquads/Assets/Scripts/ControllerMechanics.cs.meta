@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3bebb917300985846979ea33bb94c91d
+timeCreated: 1524588448
+licenseType: Pro
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - hit_prefab: {fileID: 1531446219331974, guid: ceeeb6c431305534b997fd7476ebabfb,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
