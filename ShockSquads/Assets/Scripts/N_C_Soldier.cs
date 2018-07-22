@@ -9,36 +9,38 @@ public class N_C_Soldier : N_PlayerMechanics {
     protected Class MyClass = Class.Soldier;
 
     // Primary weapon variables
-    private bool    Primary_Automatic       = true;
-    private float   Primary_RateOfFire      = 3f;
-    private float   Primary_ReloadTime      = 1.5f;
-    private bool    Primary_Reloading       = false;
-    private bool    Primary_CanFire         = true;
-    private int     Primary_ClipSize        = 100;
-    private int     Primary_Ammo            = 100;
+    private bool    P_Automatic       = true;
+    private float   P_RateOfFire      = 3f;
+    private float   P_ReloadTime      = 1.5f;
+    private bool    P_Reloading       = false;
+    private bool    P_CanFire         = true;
+    private int     P_ClipSize        = 100;
+    private int     P_Ammo            = 100;
+    private int     P_Range           = 999;
 
     // Secondary weapon variables
-    private bool    Secondary_Automatic     = false;
-    private float   Secondary_RateOfFire    = 3f;
-    private float   Secondary_RechargeRate  = 5f; //per sec
-    private bool    Secondary_CanFire       = true;
-    private int     Secondary_ClipSize      = 15;
-    private int     Secondary_Ammo          = 15;
+    private bool    S_Automatic       = false;
+    private float   S_RateOfFire      = 3f;
+    private float   S_RechargeRate    = 5f; //per sec
+    private bool    S_CanFire         = true;
+    private int     S_ClipSize        = 15;
+    private int     S_Ammo            = 15;
+    private int     S_Range           = 999;
 
     protected override void FireWeapon() {
         switch (MySelectedWeapon) {
 
             case SelectedWeapon.Primary:
-                if (Primary_CanFire) {
-                    if (Primary_Automatic && Fire_BeingPressed) {
+                if (P_CanFire) {
+                    if (P_Automatic && Fire_BeingPressed) {
                         FirePrimary();
-                    } else if (!Primary_Automatic && Fire_JustPressed) {
+                    } else if (!P_Automatic && Fire_JustPressed) {
                         FirePrimary();
                     }
                 } break;
 
             case SelectedWeapon.Secondary:
-                if (Secondary_Automatic && Fire_BeingPressed) {
+                if (S_Automatic && Fire_BeingPressed) {
                         FireSecondary();
                 } else if (Fire_JustPressed && Fire_JustPressed) {
                         FireSecondary();
@@ -54,13 +56,13 @@ public class N_C_Soldier : N_PlayerMechanics {
         switch (MySelectedWeapon) {
 
             case SelectedWeapon.Primary:
-                if (!Primary_Reloading && Primary_CanFire) {
+                if (!P_Reloading && P_CanFire) {
                     StartCoroutine(PrimaryReload());
                 } else {
                     print("Can't reload right now");
                 } break;
             case SelectedWeapon.Secondary:
-                if (!Primary_Reloading && Primary_CanFire) {
+                if (!P_Reloading && P_CanFire) {
                     StartCoroutine(PrimaryReload());
                 } else {
                     print("Can't reload right now");
@@ -82,7 +84,7 @@ public class N_C_Soldier : N_PlayerMechanics {
 
     #region Primary Weapon
     private void FirePrimary() {
-        if (Primary_CanFire && !Primary_Reloading) {
+        if (P_CanFire && !P_Reloading) {
 
             StartCoroutine(PrimaryRof());
 
@@ -91,24 +93,32 @@ public class N_C_Soldier : N_PlayerMechanics {
             }
 
             // Laser gun
+            Vector3 hit_point;
             var ray = MyCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit ray_hit;
-            if (Physics.Raycast(ray, out ray_hit)) {
-                if (Primary_Ammo > 0) {
-                    print("Shot laser at " + ray_hit.point + ". Ammo: " + Primary_Ammo);
-                    Primary_Ammo -= 1;
+            if (Physics.Raycast(ray, out ray_hit, P_Range)) {
+                hit_point = ray_hit.point;
+            } else {
+                hit_point = ray.origin + ray.direction * P_Range;
+            }
+
+            if (hit_point != null) {
+                if (P_Ammo > 0) {
+                    print("Shot laser at " + hit_point + ". Ammo: " + P_Ammo);
+                    P_Ammo -= 1;
                 } else {
                     StartCoroutine(PrimaryReload());
                 }
             }
+
         }
     }
 
     IEnumerator PrimaryReload() {
         print("reloading primary weapon");
-        Primary_Reloading = true;
-        yield return new WaitForSeconds(1 / Primary_ReloadTime);
-        Primary_Reloading = false;
+        P_Reloading = true;
+        yield return new WaitForSeconds(1 / P_ReloadTime);
+        P_Reloading = false;
     }
     #endregion
 
@@ -119,15 +129,15 @@ public class N_C_Soldier : N_PlayerMechanics {
     #endregion
 
     IEnumerator PrimaryRof() {
-        Primary_CanFire = false;
-        yield return new WaitForSeconds(1 / Primary_RateOfFire);
-        Primary_CanFire = true;
+        P_CanFire = false;
+        yield return new WaitForSeconds(1 / P_RateOfFire);
+        P_CanFire = true;
     }
     
     IEnumerator SecondaryRof() {
-        Secondary_CanFire = false;
-        yield return new WaitForSeconds(1 / Secondary_RateOfFire);
-        Secondary_CanFire = true;
+        S_CanFire = false;
+        yield return new WaitForSeconds(1 / S_RateOfFire);
+        S_CanFire = true;
     }
 
     public Class GetClass() {
