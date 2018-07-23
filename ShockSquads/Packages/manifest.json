@@ -1,10 +1,13 @@
 {
   "dependencies": {
     "com.unity.ads": "exclude",
+    "com.unity.analytics": "exclude",
+    "com.unity.package-manager-ui": "1.9.11",
     "com.unity.purchasing": "exclude",
     "com.unity.render-pipelines.core": "3.0.0-preview",
     "com.unity.render-pipelines.high-definition": "3.0.0-preview",
     "com.unity.shadergraph": "3.0.0-preview",
-    "com.unity.textmeshpro": "1.2.4"
+    "com.unity.standardevents": "exclude",
+    "com.unity.textmeshpro": "exclude"
   }
 }
