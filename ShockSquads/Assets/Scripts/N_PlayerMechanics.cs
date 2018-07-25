@@ -55,7 +55,7 @@ public class N_PlayerMechanics : N_ActorMechanics {
     private void Start() {
 
         MyCamera = Camera.main;
-        CameraEmpty = this.transform.Find("CameraEmpty").gameObject;
+        //CameraEmpty = this.transform.Find("CameraEmpty").gameObject;
         Controller = GetComponent<CharacterController>();
     }
 
@@ -113,7 +113,7 @@ public class N_PlayerMechanics : N_ActorMechanics {
             CamRotationY = Mathf.Clamp(CamRotationY, -89, 89);
 
             Quaternion NewCameraRotation = Quaternion.Euler(CamRotationY, CamRotationX, 0);
-            CameraEmpty.transform.rotation = NewCameraRotation;
+            //CameraEmpty.transform.rotation = NewCameraRotation;
             transform.rotation = Quaternion.Euler(0, CamRotationX, 0); // Rotate body with camera
         }
         
