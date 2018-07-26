@@ -6,7 +6,6 @@ using UnityEngine;
 public class N_PlayerMechanics : N_ActorMechanics {
 
     // Requires
-    protected Camera MyCamera;
     protected GameObject CameraEmpty;
     private CharacterController Controller;
 
@@ -29,7 +28,7 @@ public class N_PlayerMechanics : N_ActorMechanics {
     private float Backpedal_Multiplier = 0.75f;
     private float       Ground_Control = 0.35f;
 
-    private int             Jump_Power = 250;
+    private int             Jump_Power = 150;
     private float          Air_Control = 0.035f;
 
     private float        Gravity_Value = 9.8f;
@@ -45,17 +44,10 @@ public class N_PlayerMechanics : N_ActorMechanics {
     protected SelectedWeapon MySelectedWeapon = SelectedWeapon.Primary;
     protected bool Fire_JustPressed;
     protected bool Fire_BeingPressed;
-    
-    // Camera variables
-    CursorLockMode mode = CursorLockMode.Locked;
-    float CamSensitivity = 100f;
-    float CamRotationX = 0f;
-    float CamRotationY = 0f;
 
     private void Start() {
 
-        MyCamera = Camera.main;
-        //CameraEmpty = this.transform.Find("CameraEmpty").gameObject;
+        CameraEmpty = this.transform.Find("CameraEmpty").gameObject;
         Controller = GetComponent<CharacterController>();
     }
 
@@ -65,9 +57,6 @@ public class N_PlayerMechanics : N_ActorMechanics {
         Fire_BeingPressed = Input.GetMouseButton(0);
         Fire_JustPressed = Input.GetMouseButtonDown(0);
         Sprint_BeingPressed = Input.GetKey(KeyCode.LeftShift);
-
-        // Lock & unlock camera
-        if (Input.GetKeyDown(KeyCode.Tab)) { ToggleCameraLock(); }
 
         // Overriden weapon function inputs
         if (Fire_JustPressed || Fire_BeingPressed) { FireWeapon(); }
@@ -90,35 +79,13 @@ public class N_PlayerMechanics : N_ActorMechanics {
         MyMovementStatus = NewMovementStatus;
     }
 
-    private void ToggleCameraLock() {
-        if (Cursor.lockState == mode) {
-            print("UNLOCKING CURSOR");
-            Cursor.lockState = CursorLockMode.None;
-        } else {
-            print("LOCKING CURSOR");
-            Cursor.lockState = CursorLockMode.Locked;
-            return;
-        }
-    }
-
     private void FixedUpdate() {
 
-        // Camera follows mouse
-        if (Cursor.lockState == mode) {
-            float MousePosX = Input.GetAxis("Mouse X");
-            float MousePosY = -Input.GetAxis("Mouse Y");
+        // Rotate body with camera
+        transform.rotation = Quaternion.Euler(0, CameraEmpty.transform.localRotation.x, 0);
 
-            CamRotationX += MousePosX * CamSensitivity * Time.deltaTime;
-            CamRotationY += MousePosY * CamSensitivity * Time.deltaTime;
-            CamRotationY = Mathf.Clamp(CamRotationY, -89, 89);
-
-            Quaternion NewCameraRotation = Quaternion.Euler(CamRotationY, CamRotationX, 0);
-            //CameraEmpty.transform.rotation = NewCameraRotation;
-            transform.rotation = Quaternion.Euler(0, CamRotationX, 0); // Rotate body with camera
-        }
-        
         // Movement
-        Vector3 MovementVector = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0) *
+        Vector3 MovementVector = Quaternion.Euler(0, CameraEmpty.transform.localRotation.eulerAngles.y, 0) *
             new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         if (Controller.isGrounded) { // If grounded, apply MovementStatus speed to movement
             int ThisSpeed;

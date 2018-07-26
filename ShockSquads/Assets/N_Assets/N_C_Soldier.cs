@@ -94,7 +94,7 @@ public class N_C_Soldier : N_PlayerMechanics {
 
             // Laser gun
             Vector3 hit_point;
-            var ray = MyCamera.ScreenPointToRay(Input.mousePosition);
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit ray_hit;
             if (Physics.Raycast(ray, out ray_hit, P_Range)) {
                 hit_point = ray_hit.point;
