@@ -8,7 +8,7 @@ using UnityEngine;
 
     */
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovementOLD : MonoBehaviour {
 
     private UnityEngine.GameObject player;
     private UnityEngine.GameObject cameraEmpty;

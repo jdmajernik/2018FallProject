@@ -304,8 +304,8 @@ LensFlare:
   m_Enabled: 1
   m_Flare: {fileID: 12100000, guid: 0e5f153f2f9d947ba914bbf16a151626, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_Brightness: 1
-  m_FadeSpeed: 3
+  m_Brightness: 1.6
+  m_FadeSpeed: 0.31
   m_IgnoreLayers:
     serializedVersion: 2
     m_Bits: 6
@@ -487,7 +487,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: dd372ff4de273204e9618544d6c2d48e, type: 2}
+  - {fileID: 2100000, guid: 78ed0a569a0da524593204090fd7bab9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
