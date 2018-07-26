@@ -10,6 +10,7 @@ public class N_C_Soldier : N_PlayerMechanics {
 
     // Primary weapon variables
     [SerializeField] private GameObject P_BulletPrefab;
+    [SerializeField] private GameObject P_Barrel;
     private bool    P_Automatic       = true;
     private float   P_RateOfFire      = 3f;
     private float   P_ReloadTime      = 1.5f;
@@ -112,7 +113,8 @@ public class N_C_Soldier : N_PlayerMechanics {
                 }
             }
 
-            Transform clone = Instantiate(P_BulletPrefab.transform, ray.origin, Quaternion.LookRotation(hit_point, transform.up));
+            Transform clone = Instantiate(P_BulletPrefab.transform, P_Barrel.transform.position, Quaternion.LookRotation(hit_point, transform.up));
+            clone.GetComponent<N_TracerEffect>().ShootToHere(hit_point);
         }
     }
 

@@ -450,6 +450,7 @@ MonoBehaviour:
   MyAffiliation: 0
   P_BulletPrefab: {fileID: 1756819772124890, guid: ce16cb2aa2a287b44933f4fab77ee023,
     type: 2}
+  P_Barrel: {fileID: 1515856291574988}
 --- !u!124 &124388277784579498
 Behaviour:
   m_ObjectHideFlags: 1
