@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class N_PlayerMechanics : N_ActorMechanics {
+public class PlayerMechanics : ActorMechanics {
 
     // Requires
     protected GameObject CameraEmpty;

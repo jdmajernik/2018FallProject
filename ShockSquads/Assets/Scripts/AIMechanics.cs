@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class N_AIMechanics : N_ActorMechanics {
+public class AIMechanics : ActorMechanics {
 
     private float ThoughtSpeed = 1f;
 

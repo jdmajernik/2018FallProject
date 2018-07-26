@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum Class { Soldier };
 
-public class N_C_Soldier : N_PlayerMechanics {
+public class C_Soldier : PlayerMechanics {
 
     protected Class MyClass = Class.Soldier;
 
@@ -114,7 +114,7 @@ public class N_C_Soldier : N_PlayerMechanics {
             }
 
             Transform clone = Instantiate(P_BulletPrefab.transform, P_Barrel.transform.position, Quaternion.LookRotation(hit_point, transform.up));
-            clone.GetComponent<N_TracerEffect>().ShootToHere(hit_point);
+            clone.GetComponent<TracerEffect>().ShootToHere(hit_point);
         }
     }
 

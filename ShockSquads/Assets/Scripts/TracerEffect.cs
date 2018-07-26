@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class N_TracerEffect : MonoBehaviour {
+public class TracerEffect : MonoBehaviour {
 
     private float StartTime;
     private float JourneyLength;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class N_CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour {
 
     //Requires
     protected Camera MyCamera;

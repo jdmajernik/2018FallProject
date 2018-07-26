@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum Affiliation { Neutral };
 
-public class N_ActorMechanics : MonoBehaviour {
+public class ActorMechanics : MonoBehaviour {
 
     [SerializeField] protected Affiliation MyAffiliation;
 
