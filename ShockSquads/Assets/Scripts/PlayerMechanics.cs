@@ -47,12 +47,12 @@ public class PlayerMechanics : ActorMechanics {
 
     private void Start() {
 
-        CameraEmpty = this.transform.Find("CameraEmpty").gameObject;
+        CameraEmpty = transform.parent.gameObject;
         Controller = GetComponent<CharacterController>();
     }
 
     private void Update() {
-
+        transform.parent.position = transform.position - transform.localPosition;
         // Fire weapon inputs
         Fire_BeingPressed = Input.GetMouseButton(0);
         Fire_JustPressed = Input.GetMouseButtonDown(0);

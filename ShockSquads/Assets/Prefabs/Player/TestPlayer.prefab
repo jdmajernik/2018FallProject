@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc04539d77870646a598938229fbc7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localPrefabLaser: {fileID: 1800750543431204, guid: 48ee9d1d2e535324091644ea17ee202c,
+  localPrefabLaser: {fileID: 1903676167260396, guid: 56e294e0225946d409b20700bf93acdc,
     type: 2}
   serverPrefabLaser: {fileID: 1813189549180906, guid: e5d86d960897e4348b8f133b17d3e9dc,
     type: 2}
