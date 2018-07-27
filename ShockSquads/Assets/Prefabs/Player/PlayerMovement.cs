@@ -39,17 +39,15 @@ public class PlayerMovement : NetworkBehaviour {
     private Vector3 Last_MovementVector;
     #endregion
 
-    private void Start()
-    {
+    private void Start() {
 
-        CameraEmpty = transform.parent.gameObject;
+        CameraEmpty = GameObject.FindGameObjectWithTag("CameraParent");
         Controller = GetComponent<CharacterController>();
+        StartCoroutine(updatePos());
     }
 
-    private void Update()
-    {
+    private void Update() {
         transform.parent.position = transform.position - transform.localPosition;
-        Sprint_BeingPressed = Input.GetKey(KeyCode.LeftShift);
 
         // Player movement inputs
         if (Input.GetKeyDown(Key_Sprint)) { ChangeMovementStatus(MovementStatus.Sprinting); }
@@ -58,18 +56,11 @@ public class PlayerMovement : NetworkBehaviour {
         if (Input.GetKeyUp(Key_Sneak)) { ChangeMovementStatus(MovementStatus.Normal); }
     }
 
-    //Overriden weapon functions
-    protected virtual void SwitchWeapon() { }
-    protected virtual void ReloadWeapon() { }
-    protected virtual void FireWeapon() { }
-
-    private void ChangeMovementStatus(MovementStatus NewMovementStatus)
-    {
+    private void ChangeMovementStatus(MovementStatus NewMovementStatus) {
         MyMovementStatus = NewMovementStatus;
     }
 
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() {
 
         // Rotate body with camera
         transform.rotation = Quaternion.Euler(0, CameraEmpty.transform.localRotation.x, 0);
@@ -77,63 +68,59 @@ public class PlayerMovement : NetworkBehaviour {
         // Movement
         Vector3 MovementVector = Quaternion.Euler(0, CameraEmpty.transform.localRotation.eulerAngles.y, 0) *
             new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-        if (Controller.isGrounded)
-        { // If grounded, apply MovementStatus speed to movement
+        if (Controller.isGrounded) { // If grounded, apply MovementStatus speed to movement
             int ThisSpeed;
-            switch (MyMovementStatus)
-            {
+            switch (MyMovementStatus) {
                 case MovementStatus.Normal: ThisSpeed = Speed_Run; break;
                 case MovementStatus.Sprinting: ThisSpeed = Speed_Sprint; break;
                 case MovementStatus.Sneaking: ThisSpeed = Speed_Sneak; break;
                 default: ThisSpeed = Speed_Run; break;
             }
-            if (Input.GetAxisRaw("Vertical") < 0)
-            { // Backpedaling penality
+            if (Input.GetAxisRaw("Vertical") < 0) { // Backpedaling penality
                 if (MyMovementStatus == MovementStatus.Sprinting) { ThisSpeed = (int)(Speed_Run * Backpedal_Multiplier); } // Can't sprint backwards
                 else { ThisSpeed = (int)(ThisSpeed * Backpedal_Multiplier); }
             }
             MovementVector.x = MovementVector.x * (ThisSpeed / 10);
             MovementVector.z = MovementVector.z * (ThisSpeed / 10);
             Last_mspeed = ThisSpeed;
-        }
-        else
-        { // If not grounded, use the last applied MovementStatus speed to movement
+        } else { // If not grounded, use the last applied MovementStatus speed to movement
             MovementVector.x = MovementVector.x * (Last_mspeed / 10);
             MovementVector.z = MovementVector.z * (Last_mspeed / 10);
         }
 
         // Jump
-        if (Input.GetKey(KeyCode.Space))
-        {
-            if (Controller.isGrounded)
-            {
+        if (Input.GetButton("Jump")) {
+            if (Controller.isGrounded) {
                 MovementVector.y = (Jump_Power / 10);
             }
         }
 
-        if (Controller.isGrounded)
-        {
+        if (Controller.isGrounded) {
             // Ground Control
             Vector3 GroundMovementVector = new Vector3(
         /* x */ Last_MovementVector.x * (1 - Ground_Control) + (MovementVector.x * Ground_Control),
         /* y */ MovementVector.y, // Ready for jump input
-                                  /* z */ Last_MovementVector.z * (1 - Ground_Control) + (MovementVector.z * Ground_Control)
+        /* z */ Last_MovementVector.z * (1 - Ground_Control) + (MovementVector.z * Ground_Control)
             );
             Controller.Move(GroundMovementVector * Time.deltaTime);
             Last_MovementVector = GroundMovementVector;
             Last_vspeed = GroundMovementVector.y;
-        }
-        else
-        {
+        } else {
             // Air Control
             Vector3 AirMovementVector = new Vector3(
         /* x */ Last_MovementVector.x * (1 - Air_Control) + (MovementVector.x * Air_Control),
         /* y */ Last_vspeed - ((Gravity_Value / 10) * Gravity_Multiplier), // Gravity
-                                                                           /* z */ Last_MovementVector.z * (1 - Air_Control) + (MovementVector.z * Air_Control)
+        /* z */ Last_MovementVector.z * (1 - Air_Control) + (MovementVector.z * Air_Control)
             );
             Controller.Move(AirMovementVector * Time.deltaTime);
             Last_MovementVector = AirMovementVector;
             Last_vspeed = AirMovementVector.y;
         }
+    }
+
+    private IEnumerator updatePos() {
+        //transform.parent.gameObject.GetComponent<SpawnPlayer>().CmdUpdatePos(transform.position);
+        yield return new WaitForSeconds(.5f);
+        StartCoroutine(updatePos());
     }
 }

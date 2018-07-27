@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour {
 	void Update () {
 
         // Lock & unlock camera
-        if (Input.GetKeyDown(KeyCode.Tab)) { ToggleCameraLock(); }
+        if (Input.GetButtonDown("Camera Lock")) { ToggleCameraLock(); }
 
         if (Input.GetKeyDown(KeyCode.J)) { AddTrauma(5f); }
     }

@@ -16,10 +16,8 @@ public class PlayerMechanics : ActorMechanics {
     // Global Player Movement Variables
     private enum MovementStatus { Normal, Sprinting, Sneaking }
     private MovementStatus MyMovementStatus = MovementStatus.Normal;
-
-    private KeyCode         Key_Sprint = KeyCode.LeftShift;
+    
     private bool   Sprint_BeingPressed = false;
-    private KeyCode          Key_Sneak = KeyCode.C;
     private bool    Sneak_BeingPressed = false;
 
     private int           Speed_Sprint = 120;
@@ -60,14 +58,14 @@ public class PlayerMechanics : ActorMechanics {
 
         // Overriden weapon function inputs
         if (Fire_JustPressed || Fire_BeingPressed) { FireWeapon(); }
-        if (Input.GetKeyDown(KeyCode.R)) { ReloadWeapon(); }
-        if (Input.GetKeyDown(KeyCode.Q)) { SwitchWeapon(); }
+        if (Input.GetButtonDown("Reload")) { ReloadWeapon(); }
+        if (Input.GetButtonDown("Switch Weapon")) { SwitchWeapon(); }
 
         // Player movement inputs
-        if (Input.GetKeyDown(Key_Sprint)) { ChangeMovementStatus(MovementStatus.Sprinting); }
-        if (Input.GetKeyUp(Key_Sprint)) { ChangeMovementStatus(MovementStatus.Normal); }
-        if (Input.GetKeyDown(Key_Sneak)) { ChangeMovementStatus(MovementStatus.Sneaking); }
-        if (Input.GetKeyUp(Key_Sneak)) { ChangeMovementStatus(MovementStatus.Normal); }
+        if (Input.GetButtonDown("Sprint")) { ChangeMovementStatus(MovementStatus.Sprinting); }
+        if (Input.GetButtonUp("Sprint")) { ChangeMovementStatus(MovementStatus.Normal); }
+        if (Input.GetButtonDown("Sneak")) { ChangeMovementStatus(MovementStatus.Sneaking); }
+        if (Input.GetButtonUp("Sneak")) { ChangeMovementStatus(MovementStatus.Normal); }
     }
     
     //Overriden weapon functions
