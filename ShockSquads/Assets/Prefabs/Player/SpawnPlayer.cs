@@ -14,6 +14,8 @@ public class SpawnPlayer : NetworkBehaviour {
     [SerializeField] private GameObject localPrefabLaser;
     [SerializeField] private GameObject serverPrefabLaser;
 
+    [SyncVar] public Vector3 localPlayerPos;
+
     public override void OnStartLocalPlayer()
     {
         
@@ -28,5 +30,9 @@ public class SpawnPlayer : NetworkBehaviour {
         {
             Instantiate(serverPrefabLaser, transform);
         }
+    }
+    [Command] public void CmdUpdatePos(Vector3 newPos)
+    {
+        localPlayerPos = newPos;
     }
 }

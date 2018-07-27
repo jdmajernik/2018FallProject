@@ -470,11 +470,19 @@ InputManager:
     axis: 5
     joyNum: 0
   - serializedVersion: 3
+<<<<<<< HEAD
     m_Name: Camera Lock
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: tab
+=======
+    m_Name: Fire
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: left
+    positiveButton: right
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -482,6 +490,7 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
+<<<<<<< HEAD
     type: 0
     axis: 5
     joyNum: 0
@@ -491,6 +500,17 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: r
+=======
+    type: 2
+    axis: 5
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Debug Horizontal
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: left
+    positiveButton: right
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -498,6 +518,7 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
+<<<<<<< HEAD
     type: 0
     axis: 5
     joyNum: 0
@@ -507,6 +528,17 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: q
+=======
+    type: 2
+    axis: 5
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Debug Horizontal
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: left
+    positiveButton: right
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -514,6 +546,7 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
+<<<<<<< HEAD
     type: 0
     axis: 5
     joyNum: 0
@@ -523,6 +556,17 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: left shift
+=======
+    type: 2
+    axis: 5
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Debug Horizontal
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: left
+    positiveButton: right
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -530,6 +574,7 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
+<<<<<<< HEAD
     type: 0
     axis: 5
     joyNum: 0
@@ -539,6 +584,17 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: c
+=======
+    type: 2
+    axis: 5
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Debug Horizontal
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: left
+    positiveButton: right
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -546,6 +602,26 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
+<<<<<<< HEAD
     type: 0
+=======
+    type: 2
+    axis: 5
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Debug Horizontal
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: left
+    positiveButton: right
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 2
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
     axis: 5
     joyNum: 0

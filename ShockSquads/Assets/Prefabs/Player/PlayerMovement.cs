@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class PlayerMovement : NetworkBehaviour {
 
     // Requires
-    protected GameObject CameraEmpty;
+    [SerializeField] private GameObject CameraEmpty;
     private CharacterController Controller;
 
     //[SerializeField] protected string PlayerName;
@@ -46,8 +46,16 @@ public class PlayerMovement : NetworkBehaviour {
         StartCoroutine(updatePos());
     }
 
+<<<<<<< HEAD
     private void Update() {
         transform.parent.position = transform.position - transform.localPosition;
+=======
+    private void Update()
+    {
+        transform.parent.position = transform.localPosition;
+        Debug.Log(transform.parent.gameObject);
+        Sprint_BeingPressed = Input.GetKey(KeyCode.LeftShift);
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
 
         // Player movement inputs
         if (Input.GetKeyDown(Key_Sprint)) { ChangeMovementStatus(MovementStatus.Sprinting); }
@@ -117,9 +125,15 @@ public class PlayerMovement : NetworkBehaviour {
             Last_vspeed = AirMovementVector.y;
         }
     }
+<<<<<<< HEAD
 
     private IEnumerator updatePos() {
         //transform.parent.gameObject.GetComponent<SpawnPlayer>().CmdUpdatePos(transform.position);
+=======
+    private IEnumerator updatePos()
+    {
+        transform.parent.gameObject.GetComponent<SpawnPlayer>().CmdUpdatePos(transform.position);
+>>>>>>> 52ce2a078642dd3fe40e6cec9b00d9e3c4dc3900
         yield return new WaitForSeconds(.5f);
         StartCoroutine(updatePos());
     }
