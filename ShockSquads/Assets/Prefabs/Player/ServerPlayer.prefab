@@ -516,6 +516,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4280158313000554}
   - component: {fileID: 111309830451906722}
+  - component: {fileID: 114096509061907618}
+  - component: {fileID: 114453543763168444}
   m_Layer: 0
   m_Name: ServerPlayer
   m_TagString: Untagged
@@ -1505,6 +1507,49 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 1
+--- !u!114 &114096509061907618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1538631488511472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 194
+    i1: 121
+    i2: 155
+    i3: 116
+    i4: 77
+    i5: 124
+    i6: 190
+    i7: 4
+    i8: 72
+    i9: 37
+    i10: 169
+    i11: 29
+    i12: 230
+    i13: 55
+    i14: 13
+    i15: 10
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114453543763168444
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1538631488511472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76ab8502b2608ef4d95871c6412a33b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!137 &137113652372003128
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

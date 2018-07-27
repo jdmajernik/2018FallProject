@@ -9,6 +9,6 @@ public class ServerPlayerSync : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.position = transform.parent.gameObject.GetComponent<SpawnPlayer>().localPlayerPos;
+        transform.position = Vector3.Lerp(transform.position,transform.parent.gameObject.GetComponent<SpawnPlayer>().localPlayerPos,.5f);
 	}
 }
