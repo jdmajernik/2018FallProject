@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Spawn_Blue
   - Spawn_Red
+  - CameraParent
   layers:
   - Default
   - TransparentFX
