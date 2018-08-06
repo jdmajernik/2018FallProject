@@ -10,19 +10,22 @@ public class CameraController : MonoBehaviour {
     private CharacterController Controller;
 
     // Camera variables
-    CursorLockMode mode = CursorLockMode.Locked;
-    float CamSensitivity = 100f;
-    float CamRotationX = 0f;
-    float CamRotationY = 0f;
-    
-    float CameraRollMax = 1f; // angle that camera rolls on sideways movement
-    float CameraRollConstant = 0.1f; // smoothness essentially. lower is more smooth.
-    float LastCameraRoll = 0f;
+    private enum CameraViewMode { First, Third };
+    private CameraViewMode MyCameraViewMode;
+    private bool CameraBobAndWeave = true;
 
-    float Trauma = 0f;
-    float TraumaDampen = 3f; // divide trauma value by this to get something that can be used for ranomization
-    float TraumaIncrement = 0.35f; // drop trauma by this amount every lateupdate
-    float TraumaMax = 10f;
+    private float CamSensitivity = 100f;
+    private float CamRotationX = 0f;
+    private float CamRotationY = 0f;
+
+    private float CameraRollMax = 1f; // angle that camera rolls on sideways movement
+    private float CameraRollConstant = 0.1f; // smoothness essentially. lower is more smooth.
+    private float LastCameraRoll = 0f;
+
+    private float Trauma = 0f;
+    private float TraumaDampen = 3f; // divide trauma value by this to get something that can be used for ranomization
+    private float TraumaIncrement = 0.35f; // drop trauma by this amount every lateupdate
+    private float TraumaMax = 10f;
 
     void Start () {
 
@@ -34,15 +37,20 @@ public class CameraController : MonoBehaviour {
 	void Update () {
 
         // Lock & unlock camera
-        if (Input.GetButtonDown("Camera Lock")) { ToggleCameraLock(); }
+        if (Input.GetButtonDown("Camera Lock")) { ToggleCameraLock(false); }
+        if (Input.GetButtonUp("Camera Lock")) { ToggleCameraLock(true); }
 
+        // Change view type
+        if (Input.GetButtonDown("Camera View")) { ToggleCameraView(); }
+
+        // Debugging
         if (Input.GetKeyDown(KeyCode.J)) { AddTrauma(5f); }
     }
 
     private void LateUpdate() {
 
         // Camera follows mouse
-        if (Cursor.lockState == mode) {
+        if (Cursor.lockState == CursorLockMode.Locked) {
             
             // Get mouse inputs
             float MousePosX = Input.GetAxis("Mouse X");
@@ -53,8 +61,11 @@ public class CameraController : MonoBehaviour {
             CamRotationY = Mathf.Clamp(CamRotationY, -89, 89);
 
             // Camera roll
-            float ThisCameraRoll = LastCameraRoll * (1 - CameraRollConstant) + (-Input.GetAxisRaw("Horizontal") * CameraRollConstant);
-            LastCameraRoll = ThisCameraRoll;
+            float ThisCameraRoll = 0f;
+            if (CameraBobAndWeave) {
+                ThisCameraRoll = LastCameraRoll * (1 - CameraRollConstant) + (-Input.GetAxisRaw("Horizontal") * CameraRollConstant);
+                LastCameraRoll = ThisCameraRoll;
+            }
 
             // Trauma
             Vector3 RotationAmount = new Vector3(0,0,0);
@@ -71,18 +82,29 @@ public class CameraController : MonoBehaviour {
             MyCamera.transform.localRotation = Quaternion.Euler(RotationAmount.x, RotationAmount.y, ThisCameraRoll * CameraRollMax);
             Quaternion NewCameraRotation = Quaternion.Euler(CamRotationY, CamRotationX, 0);
             CameraEmpty.transform.rotation = NewCameraRotation;
+            if (CameraBobAndWeave) { /* Change CameraEmpty position to the position of the player's head */ }
         }
     }
 
-    private void ToggleCameraLock() {
-
-        if (Cursor.lockState == mode) {
-            print("UNLOCKING CURSOR");
-            Cursor.lockState = CursorLockMode.None;
+    private void ToggleCameraView() {
+        if (MyCameraViewMode == CameraViewMode.First) {
+            MyCameraViewMode = CameraViewMode.Third;
+            MyCamera.transform.localPosition = new Vector3(1, 1, -3);
         } else {
-            print("LOCKING CURSOR");
-            Cursor.lockState = CursorLockMode.Locked;
-            return;
+            MyCameraViewMode = CameraViewMode.First;
+            MyCamera.transform.localPosition = new Vector3(0, 0, 0);
+        }
+    }
+
+    private void ToggleCameraLock(bool b) {
+        if (b) {
+            if (Cursor.lockState == CursorLockMode.None) {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        } else {
+            if (Cursor.lockState == CursorLockMode.Locked) {
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
     }
 

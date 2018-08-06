@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private GameObject CameraEmpty;
     private CharacterController Controller;
     private CapsuleCollider CapsuleCollider;
+    private CameraController CameraController;
 
     //[SerializeField] protected string PlayerName;
 
@@ -19,22 +20,22 @@ public class PlayerMovement : MonoBehaviour {
 
     private bool Key_Sprint;
 
-    private int Speed_Sprint = 120; //120
-    private int Speed_Run = 90; //90
+    private int Speed_Sprint = 105; //120
+    private int Speed_Run = 75; //90
     private int Speed_Sneak = 30; //30
 
-    private float Slide_Control = 0.025f;
-    private float Slide_Decay = 0.05f;
-    private float Slide_Boost = 2f;
+    private float Slide_Control = 0.025f; // 0.025f
+    private float Slide_Decay = 0.05f; // 0.05f
+    private float Slide_Boost = 2f; // 2f
     private bool Slide_Ready = true;
 
-    private float Bullet_Boost = 5f;
+    private float Bullet_Boost = 5f; // 5f
     private bool Bullet_Ready = true;
 
     private float Backpedal_Multiplier = 0.75f; //0.75f
     private float Ground_Control = 0.35f; //0.35f
 
-    private int Jump_Power = 200; //150
+    private int Jump_Power = 200; //200
     private float Air_Control = 0.035f; //0.035f
 
     private float Gravity_Value = 9.8f; //9.8f
@@ -43,6 +44,8 @@ public class PlayerMovement : MonoBehaviour {
     private float Last_vspeed = 0;
     private int Last_mspeed = 0;
     private Vector3 Last_MovementVector;
+
+    private Vector3 Impulse_Vector;
 
     private bool Grounded;
     #endregion
@@ -53,6 +56,7 @@ public class PlayerMovement : MonoBehaviour {
         CameraEmpty = StaticTools.FindChildGameObjectWithTag(this.gameObject, "CameraParent");
         Controller = GetComponent<CharacterController>();
         CapsuleCollider = GetComponent<CapsuleCollider>();
+        CameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         //StartCoroutine(updatePos());
     }
 
@@ -97,6 +101,8 @@ public class PlayerMovement : MonoBehaviour {
             default: MyMovementStatus = NewMovementStatus; break;
         }
     }
+
+    public void AddImpulse(Vector3 impulse) { Impulse_Vector = impulse; }
 
     private void FixedUpdate() {
 
@@ -149,77 +155,56 @@ public class PlayerMovement : MonoBehaviour {
                 if (MyMovementStatus == MovementStatus.Sliding) {
                     if (Bullet_Ready) {
                         Bullet_Ready = false;
-                        //MovementVector.y = (Jump_Power / 15);
-                        //Last_MovementVector = Last_MovementVector * Bullet_Boost;
 
-                        MovementVector.y = CameraEmpty.transform.forward.y * (Jump_Power / 5);
-                        Last_MovementVector = new Vector3(
-                            MovementVector.x * (Speed_Run / 10),
-                            MovementVector.y,
-                            MovementVector.z * (Speed_Run / 10));
-
-                        print("BULLET");
+                        // Between 0 and 1. aiming past 90* (forward) downwards will now clamp to 0
+                        // number between 0 and 1 is % between forward and up
+                        float ForwardThrust = Mathf.Clamp(CameraEmpty.transform.forward.y, 0, 1); 
+                        MovementVector = new Vector3(
+                            MovementVector.x * ((1 - ForwardThrust) * Bullet_Boost), // More directional thrust based on the amount you /didn't/ aim up
+                            MovementVector.y + (ForwardThrust * (Jump_Power / 25)), // Bullet jump can over double your jump height if you aim up
+                            MovementVector.z * ((1 - ForwardThrust) * Bullet_Boost)
+                            );
+                        
+                        print("BULLET " + ForwardThrust);
                     }
-                    ChangeMovementStatus(MovementStatus.Normal);
+                    if (Key_Sprint) { ChangeMovementStatus(MovementStatus.Sprinting);
+                    } else { ChangeMovementStatus(MovementStatus.Normal); }
                 }
             }
         }
-        
-        if (Grounded) {
-            if (MyMovementStatus == MovementStatus.Sliding) {
-                MovementVector = new Vector3(
-                    Last_MovementVector.x * (1 - Slide_Control) + (Last_MovementVector.x * Slide_Decay * Slide_Control),
-                    MovementVector.y,
-                    Last_MovementVector.z * (1 - Slide_Control) + (Last_MovementVector.z * Slide_Decay * Slide_Control));
-            } else {
-                MovementVector = new Vector3(
-                    Last_MovementVector.x * (1 - Ground_Control) + (MovementVector.x * Ground_Control),
-                    MovementVector.y,
-                    Last_MovementVector.z * (1 - Ground_Control) + (MovementVector.z * Ground_Control));
-            }
+
+        if (Impulse_Vector != Vector3.zero) {
+            MovementVector = Impulse_Vector;
+            Impulse_Vector = Vector3.zero;
         } else {
-            if (MyMovementStatus == MovementStatus.Sliding) {
-                MovementVector = new Vector3(
-                    Last_MovementVector.x * (1 - Slide_Control) + (MovementVector.x * Slide_Control * Slide_Decay),
-                    Last_vspeed - ((Gravity_Value / 14) * Gravity_Multiplier),
-                    Last_MovementVector.z * (1 - Slide_Control) + (MovementVector.z * Slide_Control * Slide_Decay));
+            if (Grounded) {
+                if (MyMovementStatus == MovementStatus.Sliding) {
+                    MovementVector = new Vector3(
+                        Last_MovementVector.x * (1 - Slide_Control) + (Last_MovementVector.x * Slide_Decay * Slide_Control),
+                        MovementVector.y,
+                        Last_MovementVector.z * (1 - Slide_Control) + (Last_MovementVector.z * Slide_Decay * Slide_Control));
+                } else {
+                    MovementVector = new Vector3(
+                        Last_MovementVector.x * (1 - Ground_Control) + (MovementVector.x * Ground_Control),
+                        MovementVector.y,
+                        Last_MovementVector.z * (1 - Ground_Control) + (MovementVector.z * Ground_Control));
+                }
             } else {
-                MovementVector = new Vector3(
-                Last_MovementVector.x * (1 - Air_Control) + (MovementVector.x * Air_Control),
-                Last_vspeed - ((Gravity_Value / 8) * Gravity_Multiplier),
-                Last_MovementVector.z * (1 - Air_Control) + (MovementVector.z * Air_Control));
+                if (MyMovementStatus == MovementStatus.Sliding) {
+                    MovementVector = new Vector3(
+                        Last_MovementVector.x * (1 - Slide_Control) + (MovementVector.x * Slide_Control * Slide_Decay),
+                        Last_vspeed - ((Gravity_Value / 14) * Gravity_Multiplier),
+                        Last_MovementVector.z * (1 - Slide_Control) + (MovementVector.z * Slide_Control * Slide_Decay));
+                } else {
+                    MovementVector = new Vector3(
+                    Last_MovementVector.x * (1 - Air_Control) + (MovementVector.x * Air_Control),
+                    Last_vspeed - ((Gravity_Value / 8) * Gravity_Multiplier),
+                    Last_MovementVector.z * (1 - Air_Control) + (MovementVector.z * Air_Control));
+                }
             }
         }
         Controller.Move(MovementVector * Time.fixedDeltaTime);
         Last_MovementVector = MovementVector;
         Last_vspeed = MovementVector.y;
-
-        /*
-        if (Grounded) {
-            //print("Grounded");
-            Vector3 GroundMovement = new Vector3(
-                Last_MovementVector.x * (1 - Ground_Control) + (MovementVector.x * Ground_Control),
-                MovementVector.y,
-                Last_MovementVector.z * (1 - Ground_Control) + (MovementVector.z * Ground_Control)
-            );
-            Controller.Move(GroundMovement * Time.fixedDeltaTime);
-            //ThisVelocity = GroundMovement;
-            Last_MovementVector = GroundMovement;
-            Last_vspeed = GroundMovement.y;
-        } else {
-            //print("NOT GROUNDED");
-            Vector3 AirMovement = new Vector3(
-                Last_MovementVector.x * (1 - Air_Control) + (MovementVector.x * Air_Control),
-                Last_vspeed - ((Gravity_Value / 8) * Gravity_Multiplier),
-                Last_MovementVector.z * (1 - Air_Control) + (MovementVector.z * Air_Control)
-            );
-            Controller.Move(AirMovement * Time.fixedDeltaTime);
-            //ThisVelocity = AirMovement;
-            Last_MovementVector = AirMovement;
-            Last_vspeed = AirMovement.y;
-        }
-        */
     }
-
-    public void AddImpulse(Vector3 impulse) { Last_MovementVector += impulse; }
 }
