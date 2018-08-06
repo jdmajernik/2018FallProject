@@ -20,7 +20,7 @@ public class ActorMechanics : MonoBehaviour {
         }
     }
 
-    private void Death() {
+    protected virtual void Death() {
         health_current = 0;
         print("..died");
     }

@@ -4,11 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Projectile
-  - Enemy
-  - Spawn_Blue
-  - Spawn_Red
   - CameraParent
+  - AIController
+  - DatabaseDebug
   layers:
   - Default
   - TransparentFX
@@ -21,7 +19,7 @@ TagManager:
   - Map
   - Player
   - HideFromPlayer
-  - 
+  - AI
   - 
   - 
   - 
