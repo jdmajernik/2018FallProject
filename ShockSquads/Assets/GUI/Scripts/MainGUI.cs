@@ -36,19 +36,19 @@ namespace ShockSquadsGUI
             guiClip = Resources.Load<GameObject>("AmmoClip"); //TODO - DELETE this is just to test the bar decreasing as you fire
 
             //calculates the total number of bullets
-            totalBullets = bulletsPerClip * startingClips;
-            totalClips = startingClips;//REMOVABLE I can calculate this later
             //adds starting clips to the GUI
             AddClips(startingClips);
+            totalBullets = totalClips * bulletsPerClip;
             ReCenterClips();//alligns all the GUI elements
         }
         public void Fire()
         {
             //defaults to one bullet fired per firing call
             float bulletPercentage = (totalBullets - (bulletsPerClip * (totalClips - 1))) / bulletsPerClip;
-            Debug.Log("Removing a bullet - " + bulletPercentage);
-            if (bulletPercentage > 0)
+           
+            if (bulletPercentage >= 0)
             {
+                Debug.Log("Removing a bullet - " + bulletPercentage);
                 totalBullets--;
                 guiClips[guiClips.Count - 1].transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount = bulletPercentage; //this is a long one, isn't it?
             }
@@ -57,10 +57,11 @@ namespace ShockSquadsGUI
         {
             //takes input for how many bullets fired per firing call
             float bulletPercentage = (totalBullets - (bulletsPerClip * (totalClips - 1))) / bulletsPerClip;
-            Debug.Log("Removing a bullet - " + bulletPercentage);
-            if (bulletPercentage > 0)
+           
+            if (bulletPercentage >= 0)
             {
-                totalBullets-= bulletsFired;
+                Debug.Log("Removing a bullet - " + bulletPercentage);
+                totalBullets -= bulletsFired;
                 guiClips[guiClips.Count - 1].transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount = bulletPercentage; //this is a long one, isn't it?
             }
         }
@@ -77,18 +78,26 @@ namespace ShockSquadsGUI
             if(totalClips<maxClips)
             {
                 guiClips.Insert(0, GuiTools.createObject(guiClip, ammoBar));
+                totalClips = guiClips.Count;
+                totalBullets += bulletsPerClip; //just adding one clip
             }
+            
         }
         public void AddClips(float numClips)
         {
             //adds a set amount of clips to the ammo bar
-            if(numClips + totalClips > maxClips)
+            if (totalClips != maxClips)
             {
-                numClips = maxClips - totalClips;
-            }
-            for (int a = 0; a<numClips; a++)
-            {
-                guiClips.Insert(0,GuiTools.createObject(guiClip, ammoBar));
+                if (numClips + totalClips > maxClips)
+                {
+                    numClips = maxClips - totalClips;
+                }
+                for (int a = 0; a < numClips; a++)
+                {
+                    guiClips.Insert(0, GuiTools.createObject(guiClip, ammoBar));
+                }
+                totalClips = guiClips.Count;
+                totalBullets += numClips * bulletsPerClip;
             }
         }
         public void ReCenterClips ()
@@ -99,12 +108,14 @@ namespace ShockSquadsGUI
             float clipWidth = guiClip.GetComponent<RectTransform>().rect.width - buffer; //the width of the gui object
 
             Vector3 newPos = new Vector3(0, 0, 0);
-
+            Debug.Log("Total Clips - " + totalClips);
             for(int a = 0; a<guiClips.Count; a++)
             {
+                GameObject thisClip = guiClips[a];
                 float aa = a;// I do this BECAUSE INT AND FLOAT CALCULATIONS DON'T ALWAYS WORK!!!!!!! 
                 newPos.x = (aa * (clipWidth)) - ((clipWidth * totalClips) / 2);
-                guiClips[a].transform.position += newPos;//updates position
+                Debug.Log("new position - [" + aa + "]" + newPos.x);
+                thisClip.transform.position = newPos + thisClip.transform.parent.position;//updates position
             }
         }
     }
