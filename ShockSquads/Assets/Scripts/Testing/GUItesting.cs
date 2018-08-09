@@ -6,6 +6,7 @@ using ShockSquadsGUI;
 public class GUItesting : MonoBehaviour {
 
     private MainGUI testGui;
+    private GuiToolset guiTools;
 
 	// Use this for initialization
 	void Start () {
@@ -13,7 +14,8 @@ public class GUItesting : MonoBehaviour {
         int bulletsPerClip = 12;
         int maxClips = 6;
 
-        testGui = new MainGUI(maxClips, startingClips, bulletsPerClip);
+        guiTools = GameObject.FindGameObjectWithTag("GUI").GetComponent<GuiToolset>();
+        testGui = new MainGUI(maxClips, startingClips, bulletsPerClip, guiTools);
 	}
 	
 	// Update is called once per frame

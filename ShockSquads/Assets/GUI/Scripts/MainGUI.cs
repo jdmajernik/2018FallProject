@@ -9,7 +9,7 @@ namespace ShockSquadsGUI
         /// <summary>
         /// Controls the main GUI for the GAMEPLAY
         /// </summary>
-        GuiToolset GuiTools = new GuiToolset();
+        GuiToolset GuiTools;
         
         [SerializeField] private GameObject ammoBar;
 
@@ -24,11 +24,12 @@ namespace ShockSquadsGUI
         private float totalClips; //REMOVABLE the current amount of clips
 
         // Use this for initialization
-        public MainGUI(int newMaxClips, int startingClips, int newBulletsPerClip)
+        public MainGUI(int newMaxClips, int startingClips, int newBulletsPerClip, GuiToolset newGuiTools)
         {
             //sets variables from inputs
             maxClips = newMaxClips;
             bulletsPerClip = newBulletsPerClip;
+            GuiTools = newGuiTools;
 
             //sets the other private variables
             ammoBar = GameObject.FindGameObjectWithTag("AmmoBar");
@@ -67,7 +68,7 @@ namespace ShockSquadsGUI
         }
         public void Reload()
         {
-            GuiTools.removeObject(guiClips[guiClips.Count - 1]);
+            GuiTools.ReloadAnimation(guiClips[guiClips.Count - 1]);
             guiClips.RemoveAt(guiClips.Count - 1);
             totalClips--;
             totalBullets = totalClips * bulletsPerClip;
@@ -77,7 +78,7 @@ namespace ShockSquadsGUI
             //adds a clip to the ammo bar
             if(totalClips<maxClips)
             {
-                guiClips.Insert(0, GuiTools.createObject(guiClip, ammoBar));
+                guiClips.Insert(0, GuiTools.CreateObject(guiClip, ammoBar));
                 totalClips = guiClips.Count;
                 totalBullets += bulletsPerClip; //just adding one clip
             }
@@ -94,7 +95,7 @@ namespace ShockSquadsGUI
                 }
                 for (int a = 0; a < numClips; a++)
                 {
-                    guiClips.Insert(0, GuiTools.createObject(guiClip, ammoBar));
+                    guiClips.Insert(0, GuiTools.CreateObject(guiClip, ammoBar));
                 }
                 totalClips = guiClips.Count;
                 totalBullets += numClips * bulletsPerClip;
@@ -119,17 +120,5 @@ namespace ShockSquadsGUI
             }
         }
     }
-    public class GuiToolset : MonoBehaviour
-    {
-        //Exists to utilize the MonoBehaviour specific functions (cough, cough, Instantiate, cough) while being able to have a constructor
-        //Whats that? Have my cake? Eat it too??? Don't mind if I do!!!
-        public GameObject createObject (GameObject newObject, GameObject parent)
-        {
-            return Instantiate(newObject , parent.transform);
-        }
-        public void removeObject (GameObject removedObject)
-        {
-            Destroy(removedObject);
-        }
-    }
+   
 }

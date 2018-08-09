@@ -9,6 +9,7 @@ TagManager:
   - DatabaseDebug
   - AmmoBar
   - TestGui
+  - GUI
   layers:
   - Default
   - TransparentFX
