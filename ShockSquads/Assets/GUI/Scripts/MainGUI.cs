@@ -24,7 +24,7 @@ namespace ShockSquadsGUI
         private float totalClips; //REMOVABLE the current amount of clips
 
         // Use this for initialization
-        public MainGUI(int newMaxClips, int startingClips, int newBulletsPerClip, GameObject newGuiClip)
+        public MainGUI(int newMaxClips, int startingClips, int newBulletsPerClip)
         {
             //sets variables from inputs
             maxClips = newMaxClips;
@@ -40,29 +40,71 @@ namespace ShockSquadsGUI
             totalClips = startingClips;//REMOVABLE I can calculate this later
             //adds starting clips to the GUI
             AddClips(startingClips);
+            ReCenterClips();//alligns all the GUI elements
         }
         public void Fire()
         {
             //defaults to one bullet fired per firing call
             float bulletPercentage = (totalBullets - (bulletsPerClip * (totalClips - 1))) / bulletsPerClip;
             Debug.Log("Removing a bullet - " + bulletPercentage);
-            totalBullets--;
-            guiClip.transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount = (totalBullets - (bulletsPerClip * (totalClips - 1)))/bulletsPerClip;
+            if (bulletPercentage > 0)
+            {
+                totalBullets--;
+                guiClips[guiClips.Count - 1].transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount = bulletPercentage; //this is a long one, isn't it?
+            }
         }
         public void Fire(float bulletsFired)
         {
             //takes input for how many bullets fired per firing call
+            float bulletPercentage = (totalBullets - (bulletsPerClip * (totalClips - 1))) / bulletsPerClip;
+            Debug.Log("Removing a bullet - " + bulletPercentage);
+            if (bulletPercentage > 0)
+            {
+                totalBullets-= bulletsFired;
+                guiClips[guiClips.Count - 1].transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount = bulletPercentage; //this is a long one, isn't it?
+            }
+        }
+        public void Reload()
+        {
+            GuiTools.removeObject(guiClips[guiClips.Count - 1]);
+            guiClips.RemoveAt(guiClips.Count - 1);
+            totalClips--;
+            totalBullets = totalClips * bulletsPerClip;
         }
         public void AddClip()
         {
             //adds a clip to the ammo bar
+            if(totalClips<maxClips)
+            {
+                guiClips.Insert(0, GuiTools.createObject(guiClip, ammoBar));
+            }
         }
-        public void AddClips(int numClips)
+        public void AddClips(float numClips)
         {
             //adds a set amount of clips to the ammo bar
+            if(numClips + totalClips > maxClips)
+            {
+                numClips = maxClips - totalClips;
+            }
             for (int a = 0; a<numClips; a++)
             {
-                guiClips.Add(GuiTools.createObject(guiClip, ammoBar));
+                guiClips.Insert(0,GuiTools.createObject(guiClip, ammoBar));
+            }
+        }
+        public void ReCenterClips ()
+        {
+            //This re-centers the clips int the middle of the AmmoBar gameObject
+            float buffer = 9; //the buffer between the gui widths(since it's diagonal, the actual width is off)
+            float totalClips = guiClips.Count;
+            float clipWidth = guiClip.GetComponent<RectTransform>().rect.width - buffer; //the width of the gui object
+
+            Vector3 newPos = new Vector3(0, 0, 0);
+
+            for(int a = 0; a<guiClips.Count; a++)
+            {
+                float aa = a;// I do this BECAUSE INT AND FLOAT CALCULATIONS DON'T ALWAYS WORK!!!!!!! 
+                newPos.x = (aa * (clipWidth)) - ((clipWidth * totalClips) / 2);
+                guiClips[a].transform.position += newPos;//updates position
             }
         }
     }
@@ -73,6 +115,10 @@ namespace ShockSquadsGUI
         public GameObject createObject (GameObject newObject, GameObject parent)
         {
             return Instantiate(newObject , parent.transform);
+        }
+        public void removeObject (GameObject removedObject)
+        {
+            Destroy(removedObject);
         }
     }
 }

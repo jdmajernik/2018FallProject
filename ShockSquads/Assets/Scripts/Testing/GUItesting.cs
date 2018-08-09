@@ -6,16 +6,14 @@ using ShockSquadsGUI;
 public class GUItesting : MonoBehaviour {
 
     private MainGUI testGui;
-    [SerializeField] private GameObject guiClip;
+
 	// Use this for initialization
 	void Start () {
         int startingClips = 4;
         int bulletsPerClip = 12;
         int maxClips = 6;
 
-        guiClip = Resources.Load("AmmoClip") as GameObject;
-
-        testGui = new MainGUI(maxClips, startingClips, bulletsPerClip, guiClip);
+        testGui = new MainGUI(maxClips, startingClips, bulletsPerClip);
 	}
 	
 	// Update is called once per frame
@@ -25,5 +23,16 @@ public class GUItesting : MonoBehaviour {
             testGui.Fire();
             Debug.Log("Firing");
         }
-	}
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            testGui.Reload();
+            Debug.Log("Reloading");
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            testGui.AddClip();
+            testGui.ReCenterClips();
+            Debug.Log("adding Clip");
+        }
+    }
 }
