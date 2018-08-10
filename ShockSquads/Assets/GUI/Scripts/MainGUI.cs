@@ -46,24 +46,44 @@ namespace ShockSquadsGUI
         {
             //defaults to one bullet fired per firing call
             float bulletPercentage = (totalBullets - (bulletsPerClip * (totalClips - 1))) / bulletsPerClip;
-           
+            GameObject outOfAmmo = guiClips[guiClips.Count - 1].transform.GetChild(1).gameObject;
+            Image outOfAmmoImage = outOfAmmo.GetComponent<Image>();
+            Color newColor = outOfAmmoImage.color;
+
+
             if (bulletPercentage >= 0)
             {
                 Debug.Log("Removing a bullet - " + bulletPercentage);
-                totalBullets--;
+                totalBullets --;
                 guiClips[guiClips.Count - 1].transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount = bulletPercentage; //this is a long one, isn't it?
+            }
+            else
+            {
+                Debug.Log("Out of Ammo");
+                outOfAmmo.SetActive(true);
+                GuiTools.flashOutOfAmmo(outOfAmmo);
             }
         }
         public void Fire(float bulletsFired)
         {
             //takes input for how many bullets fired per firing call
             float bulletPercentage = (totalBullets - (bulletsPerClip * (totalClips - 1))) / bulletsPerClip;
-           
+            GameObject outOfAmmo = guiClips[guiClips.Count - 1].transform.GetChild(1).gameObject;
+            Image outOfAmmoImage = outOfAmmo.GetComponent<Image>();
+            Color newColor = outOfAmmoImage.color;
+
+
             if (bulletPercentage >= 0)
             {
                 Debug.Log("Removing a bullet - " + bulletPercentage);
                 totalBullets -= bulletsFired;
                 guiClips[guiClips.Count - 1].transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount = bulletPercentage; //this is a long one, isn't it?
+            }
+            else
+            {
+                Debug.Log("Out of Ammo");
+                outOfAmmo.SetActive(true);
+                GuiTools.flashOutOfAmmo(outOfAmmo);
             }
         }
         public void Reload()

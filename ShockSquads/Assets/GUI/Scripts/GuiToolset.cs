@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GuiToolset : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class GuiToolset : MonoBehaviour
 
     //Exists to utilize the MonoBehaviour specific functions (cough, cough, Instantiate, cough) while being able to have a constructor
     //Whats that? Have my cake? Eat it too??? Don't mind if I do!!!
+    private bool ammoFlashDone = true; // if the out of ammo flash coroutine is done
+
     public GameObject CreateObject(GameObject newObject, GameObject parent)
     {
         return Instantiate(newObject, parent.transform);
@@ -25,7 +28,7 @@ public class GuiToolset : MonoBehaviour
     IEnumerator RemoveAnimation(GameObject removedClip)
     {
         //the "remove" animation that removes the object before throwing it away
-        float duration = 0.05f; // the duration of the animation
+        float duration = 0.03f; // the duration of the animation
         float endTime = Time.time + duration;
         float pullDistance = 15f; //the distance to move the ammoClip
         //The points needed to do the transistion
@@ -45,13 +48,13 @@ public class GuiToolset : MonoBehaviour
             }
             yield return null;
         }
-        yield return new WaitForSeconds(0.05f); //waits just a second before moving to the throw animation
+        yield return new WaitForSeconds(0.025f); //waits just a second before moving to the throw animation
         StartCoroutine(ThrowAnimation(removedClip));
         yield return null;
     }
     IEnumerator ThrowAnimation(GameObject removedClip)
     {
-        float thrownTime = .4f; //the duration, in seconds that the throwing animation takes
+        float thrownTime = .35f; //the duration, in seconds that the throwing animation takes
         float endTime = Time.time + thrownTime; //the end time of the animation
         float endRotation = 180; //the end rotation for the animation
         //setting up the bezier variables
@@ -83,6 +86,43 @@ public class GuiToolset : MonoBehaviour
         Destroy(removedClip);
         yield return null;
     }
+    public void flashOutOfAmmo (GameObject outOfAmmo)
+    {
+        if(ammoFlashDone)
+        {
+            StartCoroutine(GuiOutOfAmmo(outOfAmmo));
+        }
+    }
+    public IEnumerator GuiOutOfAmmo (GameObject outOfAmmo)
+    {
+        float pulseDuration = 0.2f; //the duration of each pulse
+        float pulses = 3f; //the number of pulses 
+        float endTime = Time.time + (pulseDuration * pulses);
+        float startTime = Time.time; //the time the script executes
+
+        ammoFlashDone = false;
+
+        outOfAmmo.SetActive(true);
+
+        Image outOfAmmoImage = outOfAmmo.GetComponent<Image>();
+        Color newColor = outOfAmmoImage.color;
+
+        float alpha = 0f;
+
+        while (Time.time < endTime)
+        {
+            float deltaTime = Time.time - startTime;
+            alpha = (Mathf.Sin(((deltaTime/(endTime-startTime)) * (Mathf.PI * pulses))- (pulseDuration / 2)) /2) + 0.5f;
+            Debug.Log("alpha - " + alpha);
+            newColor.a = alpha;
+            outOfAmmoImage.color = newColor;
+            yield return null;
+        }
+        ammoFlashDone = true;
+        outOfAmmo.SetActive(false);
+        yield return null;
+    }
+
 }
 public class BezierCurve
 {

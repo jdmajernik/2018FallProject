@@ -81,9 +81,9 @@ public class GUItesting : MonoBehaviour {
         var grain = volume.grain.settings;
 
         bloom.bloom.intensity = intensity*3;
-        chroma.intensity = intensity;
-        vignette.intensity = Mathf.Clamp(intensity,0,0.63f);
-        grain.intensity = intensity;
+        chroma.intensity = intensity*2;
+        vignette.intensity = Mathf.Clamp(intensity*2,0,0.6f);
+        grain.intensity = intensity*0.3f;
 
         volume.bloom.settings = bloom;
         volume.chromaticAberration.settings = chroma;
