@@ -11,11 +11,18 @@ namespace ShockSquadsGUI
         /// </summary>
         GuiToolset GuiTools;
         
-        [SerializeField] private GameObject ammoBar;
-
-        [SerializeField] private GameObject guiClip;
+        private GameObject ammoBar;
+        private GameObject guiClip;
         private List<GameObject> guiClips = new List<GameObject>();
 
+        private GameObject healthBar; //the bar that goes up and down
+        private GameObject healthBarParent; //the parent object of the healthBar GUI 
+        private GameObject healthBarObject; //the prefab object to load in
+
+        private float MAX_HEALTH;
+
+        private Color healthFull = new Color((97/255),(123/255),(255/255));
+        private Color healthEmpty = new Color(177/255,255/255,247/255);
 
         private float maxClips; //the max amount of clips
         private float bulletsPerClip; //the amount of bullets in a clip
@@ -24,17 +31,22 @@ namespace ShockSquadsGUI
         private float totalClips; //REMOVABLE the current amount of clips
 
         // Use this for initialization
-        public MainGUI(int newMaxClips, int startingClips, int newBulletsPerClip, GuiToolset newGuiTools)
+        public MainGUI(int newMaxClips, int startingClips, int newBulletsPerClip, int newMaxHealth, GuiToolset newGuiTools)
         {
             //sets variables from inputs
             maxClips = newMaxClips;
             bulletsPerClip = newBulletsPerClip;
             GuiTools = newGuiTools;
+            MAX_HEALTH = newMaxHealth;
 
             //sets the other private variables
             ammoBar = GameObject.FindGameObjectWithTag("AmmoBar");
 
             guiClip = Resources.Load<GameObject>("AmmoClip"); //TODO - DELETE this is just to test the bar decreasing as you fire
+
+            healthBarParent = GameObject.FindGameObjectWithTag("HealthBar");
+            healthBarObject = Resources.Load<GameObject>("HealthBarObject");
+            healthBarObject = GuiTools.CreateObject(healthBarObject, healthBarParent);
 
             //calculates the total number of bullets
             //adds starting clips to the GUI
@@ -138,6 +150,13 @@ namespace ShockSquadsGUI
                 Debug.Log("new position - [" + aa + "]" + newPos.x);
                 thisClip.transform.position = newPos + thisClip.transform.parent.position;//updates position
             }
+        }
+        public void updateHealthBar(float health)
+        {
+            float deltaHealth = health / MAX_HEALTH;
+            Image healthBarImage = healthBarObject.transform.GetChild(1).GetComponent<Image>();
+            healthBarImage.fillAmount = deltaHealth;
+            healthBarImage.color = Color.Lerp(healthEmpty, healthFull, deltaHealth);
         }
     }
    

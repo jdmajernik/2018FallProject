@@ -796,6 +796,41 @@ Transform:
   m_Father: {fileID: 1455128429}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: -264.51, z: 0}
+--- !u!1 &314232404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 1045588633587470, guid: 1374f497f1ffc68458752d9669828be4,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 314232405}
+  m_Layer: 0
+  m_Name: HealthBarParent
+  m_TagString: HealthBar
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &314232405
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 224923917704831262, guid: 1374f497f1ffc68458752d9669828be4,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 314232404}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2129941074}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 50, y: 50}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &341661317
 GameObject:
   m_ObjectHideFlags: 0
@@ -2653,6 +2688,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volume: {fileID: 11400000, guid: a409ee29bd0a5654288233db642ec9d6, type: 2}
+  colorFull: {r: 0, g: 0.16455698, b: 1, a: 1}
+  colorEmpty: {r: 0.6933962, g: 1, b: 0.9688047, a: 0}
+  colorHalf: {r: 0.6792453, g: 0.25952297, b: 0.25952297, a: 0}
 --- !u!1 &1211005520
 GameObject:
   m_ObjectHideFlags: 0
@@ -4159,6 +4197,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 965726771}
+  - {fileID: 314232405}
   m_Father: {fileID: 2113990758}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

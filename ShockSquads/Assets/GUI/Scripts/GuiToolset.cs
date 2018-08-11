@@ -13,6 +13,10 @@ public class GuiToolset : MonoBehaviour
     //Whats that? Have my cake? Eat it too??? Don't mind if I do!!!
     private bool ammoFlashDone = true; // if the out of ammo flash coroutine is done
 
+    public GameObject CreateObject(GameObject newObject)
+    {
+        return Instantiate(newObject);
+    }
     public GameObject CreateObject(GameObject newObject, GameObject parent)
     {
         return Instantiate(newObject, parent.transform);
@@ -139,9 +143,7 @@ public class BezierCurve
         Debug.DrawLine(middlePoint, endPoint, Color.gray, 30f);
         for(float i = 0; i < 1; i+=0.1f)
         {
-            
             Debug.DrawLine(pointOnCurve(i), pointOnCurve(i + 0.1f), Color.blue, 30f);
-            Debug.Log("DRAWING LINE!!!!");
         }
     }
     public Vector3 pointOnCurve (float t)
