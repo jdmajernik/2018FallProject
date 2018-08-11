@@ -21,8 +21,8 @@ namespace ShockSquadsGUI
 
         private float MAX_HEALTH;
 
-        private Color healthFull = new Color((97/255),(123/255),(255/255));
-        private Color healthEmpty = new Color(177/255,255/255,247/255);
+        private Color healthFull = new Color(0.3820f,0.4838f,1.0f);
+        private Color healthEmpty = new Color(0.6933f,1.0f,0.9688f);
 
         private float maxClips; //the max amount of clips
         private float bulletsPerClip; //the amount of bullets in a clip
@@ -47,6 +47,7 @@ namespace ShockSquadsGUI
             healthBarParent = GameObject.FindGameObjectWithTag("HealthBar");
             healthBarObject = Resources.Load<GameObject>("HealthBarObject");
             healthBarObject = GuiTools.CreateObject(healthBarObject, healthBarParent);
+            healthBarObject.transform.localPosition += new Vector3(200, 0, 0);
 
             //calculates the total number of bullets
             //adds starting clips to the GUI
