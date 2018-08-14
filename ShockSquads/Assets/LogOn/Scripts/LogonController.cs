@@ -18,6 +18,7 @@ public class LogonController : MonoBehaviour
 
     //Variables for Scripting
     [SerializeField] private GameObject gameController;
+    private NetworkTools networkInfo;
     private DatabaseDebug debugger;
     public string ServerIP = "71.210.130.40";
     public string Port = "8080";
@@ -33,6 +34,7 @@ public class LogonController : MonoBehaviour
     void Start()
     {
         gameController = GameObject.FindGameObjectWithTag("GameController");
+        networkInfo = gameController.GetComponent<NetworkTools>();
         debugger = gameController.GetComponent<DatabaseDebug>();
         WrongLogin.gameObject.SetActive(false); //deactivates the incorrect login if it hasn't been already
         //connection = "http://" + ServerIP + ":" + Port;
@@ -69,6 +71,7 @@ public class LogonController : MonoBehaviour
             if (Parse(serverConnect.text, text))
             {
                 debugger.ServerConnected();
+                networkInfo.setServerIP(ServerIP); //if connection is sucessful, sets the global server IP to ServerIP
             }
         }
     }
@@ -85,6 +88,7 @@ public class LogonController : MonoBehaviour
             if (Parse(serverConnect.text, text))
             {
                 debugger.LoggedIn();
+                networkInfo.SetPlayerID(findPlayerID(serverConnect.text));
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
             else if (Parse(serverConnect.text, "NOTFOUND"))
@@ -134,5 +138,20 @@ public class LogonController : MonoBehaviour
             }
         }
         return false;
+    }
+    private string findPlayerID (string text)
+    {
+        char terminatorChar = '#';
+        string[] text_broken = text.Split(terminatorChar); //the output text broken by breakpoints
+        string PlayerID = "";
+        string phrase = "PlayerID";
+        for (int a = 0; a< text_broken.Length; a++)
+        {
+            if (phrase.Equals(text_broken[a]))
+            {
+                PlayerID = text_broken[a + 1];
+            }
+        }
+        return PlayerID;
     }
 }

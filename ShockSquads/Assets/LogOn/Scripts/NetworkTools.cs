@@ -8,7 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class NetworkTools : MonoBehaviour {
     //This Goes in the GameController object and handles a lot of the overarching (or global) variables and functions
-    private string PlayerId;
+    //I realize that this isn't always the best approach, but for this instance it is certainly the most manageable
+    [SerializeField]private string PlayerId;
 
     private string ServerIP;
     private string Port;
@@ -16,5 +17,26 @@ public class NetworkTools : MonoBehaviour {
     public void SetPlayerID(string newPlayerID)
     {
         PlayerId = newPlayerID;
+    }
+    public void setServerIP(string newServerIP)
+    {
+        ServerIP = newServerIP;
+    }
+    public void SetPort (string newPort)
+    {
+        Port = newPort;
+    }
+
+    public string GetPlayerID ()
+    {
+        return PlayerId;
+    }
+    public string GetServerIP ()
+    {
+        return ServerIP;
+    }
+    public string GetPort ()
+    {
+        return Port;
     }
 }
