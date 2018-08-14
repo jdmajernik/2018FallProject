@@ -36,7 +36,7 @@ public class LogonController : MonoBehaviour
         debugger = gameController.GetComponent<DatabaseDebug>();
         WrongLogin.gameObject.SetActive(false); //deactivates the incorrect login if it hasn't been already
         //connection = "http://" + ServerIP + ":" + Port;
-        connection = "http://71.210.130.40:8080";
+        connection = "http://"+ ServerIP +":8080";
         StartCoroutine(startupServerConnect("DBConnected"));
     }
     //All the button Functions
