@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/LogOn/Scenes/loginMenu.unity
     guid: ac1d435fcc9c29e4895e4fc816e23133
   - enabled: 1
-    path: Assets/Scenes/MatchLobby.unity
+    path: Assets/MatchMaking/Scenes/MatchLobby.unity
     guid: 1f9f5a54e0663174a87e9a9b6635ac43
   m_configObjects: {}
