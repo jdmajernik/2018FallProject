@@ -12,7 +12,7 @@ public class NetworkTools : MonoBehaviour {
     [SerializeField]private string PlayerId;
 
     private string ServerIP;
-    private string Port;
+    private int Port;
 
     public void SetPlayerID(string newPlayerID)
     {
@@ -22,7 +22,7 @@ public class NetworkTools : MonoBehaviour {
     {
         ServerIP = newServerIP;
     }
-    public void SetPort (string newPort)
+    public void SetPort (int newPort)
     {
         Port = newPort;
     }
@@ -35,7 +35,7 @@ public class NetworkTools : MonoBehaviour {
     {
         return ServerIP;
     }
-    public string GetPort ()
+    public int GetPort ()
     {
         return Port;
     }
