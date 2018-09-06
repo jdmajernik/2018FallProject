@@ -145,8 +145,9 @@ MonoBehaviour:
   WrongLogin: {fileID: 1435548862}
   UsernameTaken: {fileID: 1034570635}
   gameController: {fileID: 0}
-  ServerIP: 192.168.1.2
-  Port: 8080
+  ServerIP: 
+  Port: 
+  connection: 
 --- !u!4 &100257389
 Transform:
   m_ObjectHideFlags: 0
