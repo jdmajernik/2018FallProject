@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviour
+{
 
     // Requires
     [SerializeField] private GameObject CameraEmpty;
     private CharacterController Controller;
     private CapsuleCollider CapsuleCollider;
     private CameraController CameraController;
+
 
     //[SerializeField] protected string PlayerName;
 
@@ -46,12 +48,19 @@ public class PlayerMovement : MonoBehaviour {
     private Vector3 Last_MovementVector;
 
     private Vector3 Impulse_Vector;
+    //CHANGED
+    /*
+     * Moved the MovementVector to be accessed through the GLOBAL Scope and added a smoothing speed to the LateUpdate Movement.
+     * We can change the smoother speed to change the pace of the game, I tried to match as close to before as I can.
+     */
+    private Vector3 MovementVector;
+
 
     private bool Grounded;
     #endregion
 
-    private void Start() {
-
+    private void Start()
+    {
         //CameraEmpty = GameObject.FindGameObjectWithTag("CameraParent");
         CameraEmpty = StaticTools.FindChildGameObjectWithTag(this.gameObject, "CameraParent");
         Controller = GetComponent<CharacterController>();
@@ -60,7 +69,11 @@ public class PlayerMovement : MonoBehaviour {
         //StartCoroutine(updatePos());
     }
 
-    private void Update() {
+    private void Update()
+    {
+
+
+
 
         // Player movement inputs
         Key_Sprint = Input.GetButton("Sprint");
@@ -68,35 +81,48 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetButtonDown("Sprint")) { ChangeMovementStatus(MovementStatus.Sprinting); }
         if (Input.GetButtonUp("Sprint")) { ChangeMovementStatus(MovementStatus.Normal); }
 
-        if (Input.GetButtonDown("Sneak")) {
-            if (MyMovementStatus == MovementStatus.Sprinting) {
-                if (Input.GetAxisRaw("Vertical") > 0) { // Can't slide backwards
+        if (Input.GetButtonDown("Sneak"))
+        {
+            if (MyMovementStatus == MovementStatus.Sprinting)
+            {
+                if (Input.GetAxisRaw("Vertical") > 0)
+                { // Can't slide backwards
                     ChangeMovementStatus(MovementStatus.Sliding);
-                    
-                } else { ChangeMovementStatus(MovementStatus.Sneaking); }
-            } else { ChangeMovementStatus(MovementStatus.Sneaking); }
+
+                }
+                else { ChangeMovementStatus(MovementStatus.Sneaking); }
+            }
+            else { ChangeMovementStatus(MovementStatus.Sneaking); }
         }
-        if (Input.GetButtonUp("Sneak")) {
+        if (Input.GetButtonUp("Sneak"))
+        {
             if (Key_Sprint) { ChangeMovementStatus(MovementStatus.Sprinting); }
             else { ChangeMovementStatus(MovementStatus.Normal); }
         }
 
         // Testing impluses
         if (Input.GetKeyDown(KeyCode.K)) { AddImpulse(new Vector3(25, 25, 25)); }
+
+
     }
 
-    private void ChangeMovementStatus(MovementStatus NewMovementStatus) {
-        switch (NewMovementStatus) {
+    private void ChangeMovementStatus(MovementStatus NewMovementStatus)
+    {
+        switch (NewMovementStatus)
+        {
             case MovementStatus.Sliding:
-                if (Slide_Ready) {
+                if (Slide_Ready)
+                {
                     print("SLIDE");
                     Slide_Ready = false;
                     Bullet_Ready = true;
                     MyMovementStatus = NewMovementStatus;
-                    if (Grounded) {
+                    if (Grounded)
+                    {
                         Last_MovementVector = Last_MovementVector * Slide_Boost;
                     }
-                } else { print("Can't slide now"); }
+                }
+                else { print("Can't slide now"); }
                 break;
             default: MyMovementStatus = NewMovementStatus; break;
         }
@@ -104,13 +130,14 @@ public class PlayerMovement : MonoBehaviour {
 
     public void AddImpulse(Vector3 impulse) { Impulse_Vector = impulse; }
 
-    private void FixedUpdate() {
 
+    private void FixedUpdate()
+    {
         // Rotate body with camera
         transform.rotation = Quaternion.Euler(0, CameraEmpty.transform.localRotation.x, 0);
-        
-        Vector3 MovementVector = Quaternion.Euler(0, CameraEmpty.transform.localRotation.eulerAngles.y, 0) * 
-            new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+
+        MovementVector = Quaternion.Euler(0, CameraEmpty.transform.localRotation.eulerAngles.y, 0) *
+           new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
 
         //Vector3 ThisVelocity = Vector3.zero;
 
@@ -119,8 +146,10 @@ public class PlayerMovement : MonoBehaviour {
 
         RaycastHit GroundHit;
         Grounded = false;
-        if (Physics.SphereCast(new Ray(transform.position, Vector3.down), 0.4f, out GroundHit, 0.78f - (PredictNext_vspeed * Time.fixedDeltaTime))) {
-            if (Vector3.Angle(GroundHit.normal, Vector3.up) <= Controller.slopeLimit) { // Slope handling
+        if (Physics.SphereCast(new Ray(transform.position, Vector3.down), 0.4f, out GroundHit, 0.78f - (PredictNext_vspeed * Time.deltaTime)))
+        {
+            if (Vector3.Angle(GroundHit.normal, Vector3.up) <= Controller.slopeLimit)
+            { // Slope handling
                 Grounded = true;
                 if (Slide_Ready != true) { Slide_Ready = true; }
                 transform.position = new Vector3(transform.position.x, GroundHit.point.y + 1f + Controller.skinWidth, transform.position.z);
@@ -129,14 +158,18 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
 
-        if (Grounded) { // If grounded, apply MovementStatus speed to movement
+        if (Grounded)
+        { // If grounded, apply MovementStatus speed to movement
             int ThisSpeed;
-            switch (MyMovementStatus) {
+            switch (MyMovementStatus)
+            {
                 case MovementStatus.Normal: ThisSpeed = Speed_Run; break;
                 case MovementStatus.Sprinting: ThisSpeed = Speed_Sprint; break;
                 case MovementStatus.Sneaking: ThisSpeed = Speed_Sneak; break;
                 default: ThisSpeed = Speed_Run; break;
-            } if (Input.GetAxisRaw("Vertical") < 0) { // Backpedaling penality
+            }
+            if (Input.GetAxisRaw("Vertical") < 0)
+            { // Backpedaling penality
                 if (MyMovementStatus == MovementStatus.Sliding) { ChangeMovementStatus(MovementStatus.Normal); }
                 if (MyMovementStatus == MovementStatus.Sprinting) { ThisSpeed = (int)(Speed_Run * Backpedal_Multiplier); } // Can't sprint backwards
                 else { ThisSpeed = (int)(ThisSpeed * Backpedal_Multiplier); }
@@ -144,58 +177,79 @@ public class PlayerMovement : MonoBehaviour {
             MovementVector.x *= (ThisSpeed / 10);
             MovementVector.z *= (ThisSpeed / 10);
             Last_mspeed = ThisSpeed;
-        } else { // If not grounded, use the last applied MovementStatus speed to movement
+        }
+        else
+        { // If not grounded, use the last applied MovementStatus speed to movement
             MovementVector.x *= (Last_mspeed / 10);
             MovementVector.z *= (Last_mspeed / 10);
         }
-        
-        if (Input.GetButton("Jump")) {
-            if (Grounded) {
+
+        if (Input.GetButton("Jump"))
+        {
+            if (Grounded)
+            {
                 MovementVector.y = (Jump_Power / 10);
-                if (MyMovementStatus == MovementStatus.Sliding) {
-                    if (Bullet_Ready) {
+                if (MyMovementStatus == MovementStatus.Sliding)
+                {
+                    if (Bullet_Ready)
+                    {
                         Bullet_Ready = false;
 
                         // Between 0 and 1. aiming past 90* (forward) downwards will now clamp to 0
                         // number between 0 and 1 is % between forward and up
-                        float ForwardThrust = Mathf.Clamp(CameraEmpty.transform.forward.y, 0, 1); 
+                        float ForwardThrust = Mathf.Clamp(CameraEmpty.transform.forward.y, 0, 1);
                         MovementVector = new Vector3(
                             MovementVector.x * ((1 - ForwardThrust) * Bullet_Boost), // More directional thrust based on the amount you /didn't/ aim up
                             MovementVector.y + (ForwardThrust * (Jump_Power / 25)), // Bullet jump can over double your jump height if you aim up
                             MovementVector.z * ((1 - ForwardThrust) * Bullet_Boost)
                             );
-                        
+
                         print("BULLET " + ForwardThrust);
                     }
-                    if (Key_Sprint) { ChangeMovementStatus(MovementStatus.Sprinting);
-                    } else { ChangeMovementStatus(MovementStatus.Normal); }
+                    if (Key_Sprint)
+                    {
+                        ChangeMovementStatus(MovementStatus.Sprinting);
+                    }
+                    else { ChangeMovementStatus(MovementStatus.Normal); }
                 }
             }
         }
 
-        if (Impulse_Vector != Vector3.zero) {
+        if (Impulse_Vector != Vector3.zero)
+        {
             MovementVector = Impulse_Vector;
             Impulse_Vector = Vector3.zero;
-        } else {
-            if (Grounded) {
-                if (MyMovementStatus == MovementStatus.Sliding) {
+        }
+        else
+        {
+            if (Grounded)
+            {
+                if (MyMovementStatus == MovementStatus.Sliding)
+                {
                     MovementVector = new Vector3(
                         Last_MovementVector.x * (1 - Slide_Control) + (Last_MovementVector.x * Slide_Decay * Slide_Control),
                         MovementVector.y,
                         Last_MovementVector.z * (1 - Slide_Control) + (Last_MovementVector.z * Slide_Decay * Slide_Control));
-                } else {
+                }
+                else
+                {
                     MovementVector = new Vector3(
                         Last_MovementVector.x * (1 - Ground_Control) + (MovementVector.x * Ground_Control),
                         MovementVector.y,
                         Last_MovementVector.z * (1 - Ground_Control) + (MovementVector.z * Ground_Control));
                 }
-            } else {
-                if (MyMovementStatus == MovementStatus.Sliding) {
+            }
+            else
+            {
+                if (MyMovementStatus == MovementStatus.Sliding)
+                {
                     MovementVector = new Vector3(
                         Last_MovementVector.x * (1 - Slide_Control) + (MovementVector.x * Slide_Control * Slide_Decay),
                         Last_vspeed - ((Gravity_Value / 14) * Gravity_Multiplier),
                         Last_MovementVector.z * (1 - Slide_Control) + (MovementVector.z * Slide_Control * Slide_Decay));
-                } else {
+                }
+                else
+                {
                     MovementVector = new Vector3(
                     Last_MovementVector.x * (1 - Air_Control) + (MovementVector.x * Air_Control),
                     Last_vspeed - ((Gravity_Value / 8) * Gravity_Multiplier),
@@ -203,8 +257,16 @@ public class PlayerMovement : MonoBehaviour {
                 }
             }
         }
-        Controller.Move(MovementVector * Time.fixedDeltaTime);
+
         Last_MovementVector = MovementVector;
         Last_vspeed = MovementVector.y;
+
+
+
+    }
+
+    private void LateUpdate()
+    {
+        Controller.Move(MovementVector * Time.deltaTime);
     }
 }
