@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: afe4a4c9e0977c540a06fc945e3c1a40
+guid: ec2ea17acdd5dd648baf53a6ce66867d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -11,7 +11,8 @@ TrueTypeFontImporter:
   fontName: Renegado
   fontNames:
   - Renegado
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: afe4a4c9e0977c540a06fc945e3c1a40, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

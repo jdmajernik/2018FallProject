@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: da353aede4916d94398dee05310f4cac
+guid: 1012c286a1125b245aaf7dd697567e03
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -11,7 +11,8 @@ TrueTypeFontImporter:
   fontName: Renegado Laser
   fontNames:
   - Renegado Laser
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: da353aede4916d94398dee05310f4cac, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
