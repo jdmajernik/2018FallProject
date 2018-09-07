@@ -7,39 +7,86 @@ public class PlayerMechanics : ActorMechanics {
 
     // Requires
     
-    //[SerializeField] protected string PlayerName;
-    private string EntityName = "Tester114";
-    
+    // this will boil down to just being the player's name
+    private string entityName;
+    public string EntityName {
+        get { return entityName; }
+        set { entityName = value; }
+    }
+
     // Weapon variables
     protected enum SelectedWeapon { Primary, Secondary };
     protected SelectedWeapon MySelectedWeapon = SelectedWeapon.Primary;
-    protected bool Fire_JustPressed;
-    protected bool Fire_BeingPressed;
-    
+    protected bool fire_JustPressed;
+    protected bool fire_BeingPressed;
+
+    // this dictionary holds each of the currently worn body parts. The size of this
+    // will never change, because you can only have 1 of each body part obvi. You only ever
+    // need to set the values in this dictionary, the keys are there to access the right spots.
+    private Dictionary<BodyPartType, BodyPart> bodyParts = new Dictionary<BodyPartType, BodyPart>()
+    {
+        { BodyPartType.Head, null },
+        { BodyPartType.Torso, null },
+        { BodyPartType.RightArm, null },
+        { BodyPartType.LeftArm, null },
+        { BodyPartType.RightLeg, null },
+        { BodyPartType.LeftLeg, null }
+    };
+
     private void Start()
     {
+        AddBodyPart(new BP.RabbitLeg());
+        AddBodyPart(new BP.PegLeg());
+        AddBodyPart(new BP.Flail());
+        AddBodyPart(new BP.MonsterHand());
+        AddBodyPart(new BP.FatBelly());
+        AddBodyPart(new BP.Bucket());
+
+        // debugging to make sure that all body parts are filled with the test defaults
+        foreach (BodyPart bodyPart in bodyParts.Values)
+        {
+            Debug.Log("Wearing part " + bodyPart.ToString());
+        }
 
     }
     
-    private void Update() {
-    
+    private void Update()
+    {
         //transform.parent.position = transform.position - transform.localPosition;
         // Fire weapon inputs
-        Fire_BeingPressed = Input.GetMouseButton(0);
-        Fire_JustPressed = Input.GetMouseButtonDown(0);
+        fire_BeingPressed = Input.GetMouseButton(0);
+        fire_JustPressed = Input.GetMouseButtonDown(0);
         
         // Overriden weapon function inputs
-        if (Fire_JustPressed || Fire_BeingPressed) { FireWeapon(); }
+        if (fire_JustPressed || fire_BeingPressed) { FireWeapon(); }
         if (Input.GetButtonDown("Reload")) { ReloadWeapon(); }
         if (Input.GetButtonDown("Switch Weapon")) { SwitchWeapon(); }
     }
 
-    //Overriden weapon functions
-    protected virtual void SwitchWeapon() { }
-    protected virtual void ReloadWeapon() { }
-    protected virtual void FireWeapon() { }
-    
-    public string GetName() {
-        return EntityName;
+    // automatically finds which slot this bodyPart should go into and replaces it.
+    public void AddBodyPart(BodyPart bodyPart)
+    {
+        BodyPartType type = bodyPart.BodyPartType;
+        bodyParts[type] = bodyPart;
     }
+
+    #region Weapon functions
+
+    //Overriden weapon functions
+    protected virtual void SwitchWeapon()
+    {
+
+    }
+
+    protected virtual void ReloadWeapon()
+    {
+
+    }
+
+    protected virtual void FireWeapon()
+    {
+
+    }
+    #endregion
+
 }
