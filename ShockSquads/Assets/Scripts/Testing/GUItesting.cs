@@ -32,6 +32,7 @@ public class GUItesting : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
+        volume = Resources.Load<PostProcessingProfile>("TestPostProcessing");
         colorHalf = (colorFull + colorEmpty)/2;
 
         int startingClips = 4;
