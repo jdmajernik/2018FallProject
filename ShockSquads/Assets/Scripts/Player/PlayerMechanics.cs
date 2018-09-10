@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMechanics : ActorMechanics {
 
-    // Requires
-    
     // this will boil down to just being the player's name
     private string entityName;
     public string EntityName {
@@ -20,32 +18,48 @@ public class PlayerMechanics : ActorMechanics {
     protected bool fire_JustPressed;
     protected bool fire_BeingPressed;
 
-    // this dictionary holds each of the currently worn body parts. The size of this
-    // will never change, because you can only have 1 of each body part obvi. You only ever
-    // need to set the values in this dictionary, the keys are there to access the right spots.
-    private Dictionary<BodyPartType, BodyPart> bodyParts = new Dictionary<BodyPartType, BodyPart>()
+    // this is a parallel array system. Because an array can't hold two different types
+    // of variables for each column, we will use this. A dictionary cannot have two of
+    // the same key either, which is something we need to do (two legs, two arms).
+    private BodyPartType[] bodyPartTypes = new BodyPartType[6]
     {
-        { BodyPartType.Head, null },
-        { BodyPartType.Torso, null },
-        { BodyPartType.RightArm, null },
-        { BodyPartType.LeftArm, null },
-        { BodyPartType.RightLeg, null },
-        { BodyPartType.LeftLeg, null }
+        BodyPartType.Head,
+        BodyPartType.Torso,
+        BodyPartType.Arm,
+        BodyPartType.Arm,
+        BodyPartType.Leg,
+        BodyPartType.Leg
+    };
+
+    private BodyPart[] bodyParts = new BodyPart[6]
+    {
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
     };
 
     private void Start()
     {
-        AddBodyPart(new BP.RabbitLeg());
-        AddBodyPart(new BP.PegLeg());
-        AddBodyPart(new BP.Flail());
-        AddBodyPart(new BP.MonsterHand());
-        AddBodyPart(new BP.FatBelly());
-        AddBodyPart(new BP.Bucket());
+
+        AddBodyPart(BodyPartFactory.Lookup("Rabbit Leg"));
+        AddBodyPart(BodyPartFactory.Lookup("Bucket Head")); // doesn't exist
+        
 
         // debugging to make sure that all body parts are filled with the test defaults
-        foreach (BodyPart bodyPart in bodyParts.Values)
+
+        for (int i = 0; i < bodyPartTypes.Length; i++)
         {
-            Debug.Log("Wearing part " + bodyPart.ToString());
+            if (bodyParts[i] != null)
+            {
+                Debug.Log("In slot " + bodyPartTypes[i].ToString() + " you're wearing " + bodyParts[i].name);
+            }
+            else
+            {
+                Debug.Log("In slot " + bodyPartTypes[i].ToString() + " you're not wearing anything");
+            }
         }
 
     }
@@ -66,8 +80,42 @@ public class PlayerMechanics : ActorMechanics {
     // automatically finds which slot this bodyPart should go into and replaces it.
     public void AddBodyPart(BodyPart bodyPart)
     {
-        BodyPartType type = bodyPart.BodyPartType;
-        bodyParts[type] = bodyPart;
+        if (bodyPart != null)
+        {
+            BodyPartType type = bodyPart.BodyPartType;
+            int slot = 0;
+            switch (type)
+            {
+                case BodyPartType.Head: slot = 0; break;
+                case BodyPartType.Torso: slot = 1; break;
+                case BodyPartType.Arm:
+                    if (bodyParts[2] != null)
+                    {
+                        slot = 3;
+                    }
+                    else
+                    {
+                        slot = 2;
+                    }
+                    break;
+                case BodyPartType.Leg:
+                    if (bodyParts[4] != null)
+                    {
+                        slot = 5;
+                    }
+                    else
+                    {
+                        slot = 4;
+                    }
+                    break;
+                default: break;
+            }
+            bodyParts[slot] = bodyPart;
+        }
+        else
+        {
+            Debug.Log("Not a valid bodyPart. was null. can't equip");
+        }
     }
 
     #region Weapon functions
