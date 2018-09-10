@@ -21,7 +21,7 @@ public class LogonController : MonoBehaviour
     private NetworkTools networkInfo;
     private DatabaseDebug debugger;
     public string ServerIP = "71.210.130.40";
-    public string Port = "8080";
+    public string Port = "4139";
 
     private string connection;
     private string username;
@@ -38,7 +38,7 @@ public class LogonController : MonoBehaviour
         debugger = gameController.GetComponent<DatabaseDebug>();
         WrongLogin.gameObject.SetActive(false); //deactivates the incorrect login if it hasn't been already
         //connection = "http://" + ServerIP + ":" + Port;
-        connection = "http://"+ ServerIP +":8080";
+        connection = "http://"+ ServerIP +":" + Port;
         StartCoroutine(startupServerConnect("DBConnected"));
     }
     //All the button Functions
